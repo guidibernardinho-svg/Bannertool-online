@@ -1,0 +1,30 @@
+name: Build Banner
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Instalar bannertool
+        run: |
+          sudo apt update
+          sudo apt install -y bannertool
+
+      - name: Gerar banner
+        run: |
+          bannertool makebanner -i icon.png -o banner.bin
+          bannertool makesmdh -i icon.png -s "Meu App" -o icon.smdh
+
+      - name: Upload arquivos
+        uses: actions/upload-artifact@v4
+        with:
+          name: output
+          path: |
+            banner.bin
+            icon.smdh
